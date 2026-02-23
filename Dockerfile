@@ -15,10 +15,9 @@ WORKDIR /var/www
 
 COPY . /var/www
 
+RUN if [ ! -d vendor ]; then composer install --no-interaction --prefer-dist; fi
 RUN cp .env.example .env || true
-RUN if [ ! -d vendor ]; then composer install --no-interaction --prefer-dist --no-scripts; fi
 RUN php artisan key:generate || true
-RUN php artisan package:discover --ansi || true
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache || true
 
 CMD ["php-fpm"]
